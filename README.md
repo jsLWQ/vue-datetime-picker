@@ -21,6 +21,7 @@
 ## 样例
 
 在线实例  👉  [DEMO](https://ctxtub.com/vue-datetime-picker/)
+预览  👉  [img](https://github.com/jsLWQ/vue-datetime-picker/blob/dev/1.0/E46B857F-0FBF-430B-AD50-831941470F3B.png)
 
 ```vue
 <vue-date-time-picker
