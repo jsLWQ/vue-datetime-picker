@@ -141,6 +141,32 @@
               <li></li>
             </ul>
           </div>
+          <div class="picker-box-content-list" v-if="type === 'dateTime' || type === 'time'">
+            
+            <ul 
+                :class="{'is_dragging': secondState.dragging}" 
+                @touchstart="_onTouchStart('second', $event)" 
+                @mousedown="_onTouchStart('second', $event)" 
+                :style="{'transform' : 'translate3d(0,' + secondState.translateY + 'px, 0)'}">
+              <li></li>
+              <li></li>
+              <li></li>
+              <li 
+                  v-for="(item, index) in secondState.data" 
+                  :key="index" 
+                  :class="{
+                          'current': item === secondState.selectedId,
+                          'node1':  Math.abs(index - secondState.index) == 1,
+                          'node2':  Math.abs(index - secondState.index) == 2,
+                          'node3':  Math.abs(index - secondState.index) >= 3
+                  }">
+                {{item}}{{item === secondState.selectedId ? selectedText.second: ''}}
+                </li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+          </div>
         </div>
         <hr class="selected-top-line">
         <hr class="selected-bottom-line">
@@ -173,7 +199,8 @@ export default {
           month: '月',
           day: '日',
           hour: '时',
-          minute: '分'
+          minute: '分',
+          second: '秒'
         }
       }
     },
@@ -258,6 +285,15 @@ export default {
         dragging: false
       },
       minuteState: {
+        data: null,
+        selectedId: null,
+        index: 0,
+        startPos: null,
+        translateY: 0,
+        startTranslateY: 0,
+        dragging: false
+      },
+      secondState: {
         data: null,
         selectedId: null,
         index: 0,
@@ -444,6 +480,7 @@ export default {
       const dayState = this.dayState
       const hourState = this.hourState
       const minuteState = this.minuteState
+      const secondState = this.secondState
 
       yearState.data = this.computedYear()
       yearState.selectedId = curDate.getFullYear()
@@ -460,6 +497,9 @@ export default {
       minuteState.data = this.computedMinute()
       minuteState.selectedId = curDate.getMinutes() < 10 ? '0' + curDate.getMinutes() : curDate.getMinutes()
 
+      secondState.data = this.computedMinute()
+      secondState.selectedId = curDate.getMinutes() < 10 ? '0' + curDate.getMinutes() : curDate.getMinutes()
+
       if (this.value) {
         this.transToSetDay(300)
         this.firstShow = false
@@ -471,6 +511,7 @@ export default {
       const dayState = this.dayState
       const hourState = this.hourState
       const minuteState = this.minuteState
+      const secondState = this.secondState
 
       yearState.data = this.computedYear()
       yearState.selectedId = this.startYear
@@ -486,6 +527,9 @@ export default {
 
       minuteState.data = this.computedMinute()
       minuteState.selectedId = '00'
+
+      secondState.data = this.computedMinute()
+      secondState.selectedId = '00'
 
       if (this.value) {
         this.transToSetDay(300)
@@ -547,7 +591,8 @@ export default {
             'month': this.monthState.data[this.monthState.index],
             'day': this.dayState.data[this.dayState.index],
             'hour': this.hourState.data[this.hourState.index],
-            'minute': this.minuteState.data[this.minuteState.index]
+            'minute': this.minuteState.data[this.minuteState.index],
+            'second': this.secondState.data[this.secondState.index]
           }
           break
         case 'date':
@@ -564,6 +609,8 @@ export default {
           }
           break
       }
+
+      console.log('this.result',this.result)
       this.show = false
     },
     transToMonthFilter () {

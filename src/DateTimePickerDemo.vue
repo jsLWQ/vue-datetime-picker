@@ -26,7 +26,8 @@
         month: 'M',
         day: 'D',
         hour: '',
-        minute: ''
+        minute: '',
+        second: ''
       }"
       :startYear="startTime.year" 
       :startMonth="startTime.month" 
